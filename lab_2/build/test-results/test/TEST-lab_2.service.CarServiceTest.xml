@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="lab_2.service.CarServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-10-04T15:26:09" hostname="DESKTOP-C14UUIG" time="0.012">
+  <properties/>
+  <testcase name="findByMake()" classname="lab_2.service.CarServiceTest" time="0.012"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
