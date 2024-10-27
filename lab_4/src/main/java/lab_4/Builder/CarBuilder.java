@@ -1,14 +1,14 @@
 package lab_4.Builder;
+import lab_4.Car;
 import jakarta.validation.*;
-import lab_4.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
-
+import static jakarta.validation.Validation.buildDefaultValidatorFactory;
 import java.time.LocalDate;
 import java.util.Set;
-import static jakarta.validation.Validation.buildDefaultValidatorFactory;
 
-public class CarBuilder<T extends Car> {
+
+public class CarBuilder {
     @NotNull(message = "Make cannot be null")
     @Length(min = 3, max = 30, message = "Make must be between 3 and 30 characters")
     private String make;
@@ -26,6 +26,7 @@ public class CarBuilder<T extends Car> {
     private String plateNumber;
 
     @NotNull(message = "releaseDate cannot be null")
+    // перевірка дати (завтра не може бути)
     private LocalDate releaseDate;
 
     @NotNull(message = "pricePerDay cannot be null")
@@ -33,53 +34,50 @@ public class CarBuilder<T extends Car> {
     private double pricePerDay;
 
     @NotNull(message = "mileage cannot be null")
+    @Min(value = 0, message = "mileage cannot be less than 0")
+    @Max(value = 100_000, message = "mileage cannot be greater than 100_000")
     private int mileage;
 
 
-    public CarBuilder<T> setMake(String make) {
+    public CarBuilder setMake(String make) {
         this.make = make;
         return this;
     }
 
-    public CarBuilder<T> setVin(String vin) {
+    public CarBuilder setVin(String vin) {
         this.vin = vin;
         return this;
     }
-    public CarBuilder<T> setPlateNumber(String plateNumber) {
+    public CarBuilder setPlateNumber(String plateNumber) {
         this.plateNumber = plateNumber;
         return this;
     }
 
-    public CarBuilder<T> setReleaseDate(LocalDate releaseDate) {
+    public CarBuilder setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
         return this;
     }
 
-    public CarBuilder<T> setPricePerDay(double pricePerDay) {
+    public CarBuilder setPricePerDay(double pricePerDay) {
         this.pricePerDay = pricePerDay;
         return this;
     }
 
-    public CarBuilder<T> setMileage(int mileage) {
+    public CarBuilder setMileage(int mileage) {
         this.mileage = mileage;
         return this;
     }
 
 
-    public T build(T car) {
+    public Car build() {
         ValidatorFactory factory = buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-        car.setMake(this.make);
-        car.setVin(this.vin);
-        car.setPlateNumber(this.plateNumber);
-        car.setReleaseDate(this.releaseDate);
-        car.setPricePerDay(this.pricePerDay);
-        car.setMileage(this.mileage);
+        Car car = new Car(this.make, this.vin, this.plateNumber, this.releaseDate, this.pricePerDay, this.mileage);
 
-        Set<ConstraintViolation<CarBuilder<T>>> violations = validator.validate(this);
+        Set<ConstraintViolation<CarBuilder>> violations = validator.validate(this);
         if (!violations.isEmpty()) {
             StringBuilder sb = new StringBuilder();
-            for (ConstraintViolation<CarBuilder<T>> violation : violations) {
+            for (ConstraintViolation<CarBuilder> violation : violations) {
                 sb
                         .append("\nField: ")
                         .append(violation.getPropertyPath())

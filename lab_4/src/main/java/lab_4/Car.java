@@ -10,7 +10,6 @@ import java.util.Objects;
  * Клас, що представляє автомобіль для оренди.
  */
 @Getter
-@Builder
 @Setter
 public class Car {
     private String make;
